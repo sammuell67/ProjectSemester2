@@ -9,7 +9,7 @@
     <title>Portál</title>
     <meta content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="style.css">
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script types="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
 <script type="text/javascript" src="script.js"></script>
   </head>
   <body> 
