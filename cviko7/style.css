@@ -1,0 +1,34 @@
+body{
+    text-align: center;
+
+}
+
+#pocasie {
+    height:100px;
+    display: inline-flex;
+
+}
+
+div .forecast{
+    text-align:center;
+    width:250px;
+    display: inline;
+    margin:auto;
+}
+
+#code{
+    display: none;
+}
+header{
+    padding: 10px;
+    background: #ccc;
+}
+a{
+    margin-right: 50px;
+}
+td{
+    padding: 5px;
+}
+table{
+    margin:auto;
+}

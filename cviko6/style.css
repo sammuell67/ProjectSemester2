@@ -1,0 +1,47 @@
+#container{
+    width: 500px;
+    margin:0;
+    /*float: left;*/
+}
+#myDiv{
+
+    width:500px;
+    height:500px;
+    overflow: auto;
+    position: absolute;
+    top:10px;
+    left:600px;
+    float: right;
+}
+
+input[type=text] {
+    width: 150px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    /*background-color: white;
+
+    background-position: 10px 10px;
+    background-repeat: no-repeat;*/
+    padding: 10px 22px;
+}
+select,input[type=button], input[type=submit], input[type=reset] {
+
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 12px 24px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+form {
+    width: 500px;
+    margin:10px;
+    padding: 10px;
+    border: 1px solid grey;
+}
+h5{
+    margin:0;
+}

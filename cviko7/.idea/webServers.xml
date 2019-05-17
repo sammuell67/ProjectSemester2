@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="e22d88de-71d5-4fa9-a57f-6e4163ffbcad" name="webte" url="http://147.175.98.208">
+        <fileTransfer host="147.175.98.208" port="22" rootFolder="/home/xsmetankaj/public_html" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
