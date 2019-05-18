@@ -1,13 +1,15 @@
-
-
 <!DOCTYPE HTML>
 <html lang="sk">
 <head>
     <meta content="text/html; charset=UTF-8">
     <title>Login</title>
     <link rel="stylesheet" href="css/loginstyle.css">
+    <link rel="stylesheet" href="css/style.css">
+
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:700,600' rel='stylesheet' type='text/css'>
 </head>
+
+
 <?php
 
 require 'config.php';
@@ -20,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $login = test_input($_POST["aisid"]);
     $pass = test_input($_POST["password"]);
 
-    echo $login;
+
 }
 
 function test_input($data)
@@ -43,20 +45,58 @@ $datum = date("Y-m-d H:i:s");;
 
 if (($pass AND $login) != "") {
 
+    $hashed_password = password_hash($pass, PASSWORD_DEFAULT);
 
-    echo '<h5>Prihlásený uživateľ: </h5>' . $login;
+    $overenie_hesla = mysqli_query($conn, "SELECT Heslo FROM Login WHERE id = '$login'");
 
-    $in = " INSERT INTO Login (ID, Datum) VALUES ('$login','$datum')  ON DUPLICATE KEY UPDATE ID = $login;";
 
-    if ($conn->query($in) === TRUE) {
+    /* TODO: fixniteto prosim*/
+   // if ($overenie_hesla==$hashed_password)
 
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
+        $in = " INSERT INTO Login (ID,Heslo, Datum) VALUES ('$login','$hashed_password','$datum')  ON DUPLICATE KEY UPDATE ID = '$login';";
+        $result = mysqli_query($conn, "SELECT * FROM Webtech2 WHERE id = $login");
+
+
+        echo "<div class='topnav''>";
+        echo "<a class='active'>Prihlásený použivateľ : $login</a>";
+        echo "</div>";
+
+
+        echo "<table class='blueTable'>";
+        echo "<th>Zapocet</th>";
+        echo "<th>Projekt</th>";
+        echo "<th>Test</th>";
+        echo "<th>Dotazník</th>";
+        echo "<th>Bonus</th>";
+        echo "<th>Súčet</th>";
+        echo "<th>Známka</th>";
+
+        echo "</tr>";
+
+        while ($row = mysqli_fetch_array($result)) {
+
+            echo "<td>" . $row['Zapocet'] . "</td>";
+            echo "<td>" . $row['Projekt'] . "</td>";
+            echo "<td>" . $row['Test'] . "</td>";
+            echo "<td>" . $row['Dotaznik'] . "</td>";
+            echo "<td>" . $row['Bonus'] . "</td>";
+            echo "<td>" . $row['Sucet'] . "</td>";
+            echo "<td>" . $row['Znamka'] . "</td>";
+            echo "</tr>";
+        }
+        echo "</table>";
+
+
+if ($conn->query($in) === TRUE) {
+
+} else {
+    echo "Error: " . $sql . "<br>" . $conn->error;
+}
 
 
 } else {
-    echo "Nevyplnene udaje";
+    echo "";
 }
 $conn->close();
 ?>
+
