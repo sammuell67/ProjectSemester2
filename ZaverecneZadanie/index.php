@@ -12,6 +12,11 @@
         <div class="box">
             <h1>Login</h1>
 
+            Prihlásanie ako admin
+            <label class="switch">
+                <input name="checkboxik" type="checkbox" >
+                <span class="slider round"></span>
+            </label>
 
             <input type="text"  name="aisid" placeholder="AIS ID" class="email" />
 

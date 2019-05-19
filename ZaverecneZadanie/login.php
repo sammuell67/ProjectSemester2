@@ -47,51 +47,56 @@ if (($pass AND $login) != "") {
 
     $hashed_password = password_hash($pass, PASSWORD_DEFAULT);
 
+    if (isset($_POST['checkboxik'])){
+        header('Location: admin.php?login='.$login.'&hashed_password='.$hashed_password); // redirect to index.php
+        exit;
+    }
+
     $overenie_hesla = mysqli_query($conn, "SELECT Heslo FROM Login WHERE id = '$login'");
 
 
     /* TODO: fixniteto prosim*/
-   // if ($overenie_hesla==$hashed_password)
+    // if ($overenie_hesla==$hashed_password)
 
-        $in = " INSERT INTO Login (ID,Heslo, Datum) VALUES ('$login','$hashed_password','$datum')  ON DUPLICATE KEY UPDATE ID = '$login';";
-        $result = mysqli_query($conn, "SELECT * FROM Webtech2 WHERE id = $login");
-
-
-        echo "<div class='topnav''>";
-        echo "<a class='active'>Prihlásený použivateľ : $login</a>";
-        echo "</div>";
+    $in = " INSERT INTO Login (ID,Heslo, Datum) VALUES ('$login','$hashed_password','$datum')  ON DUPLICATE KEY UPDATE ID = '$login';";
+    $result = mysqli_query($conn, "SELECT * FROM Webtech2 WHERE id = $login");
 
 
-        echo "<table class='blueTable'>";
-        echo "<th>Zapocet</th>";
-        echo "<th>Projekt</th>";
-        echo "<th>Test</th>";
-        echo "<th>Dotazník</th>";
-        echo "<th>Bonus</th>";
-        echo "<th>Súčet</th>";
-        echo "<th>Známka</th>";
+    echo "<div class='topnav''>";
+    echo "<a class='active'>Prihlásený použivateľ : $login</a>";
+    echo "</div>";
 
+    echo "<h2>Webové technológie 2</h2>";
+    echo "<table class='blueTable'>";
+    echo "<th>Zapocet</th>";
+    echo "<th>Projekt</th>";
+    echo "<th>Test</th>";
+    echo "<th>Dotazník</th>";
+    echo "<th>Bonus</th>";
+    echo "<th>Súčet</th>";
+    echo "<th>Známka</th>";
+
+    echo "</tr>";
+
+    while ($row = mysqli_fetch_array($result)) {
+
+        echo "<td>" . $row['Zapocet'] . "</td>";
+        echo "<td>" . $row['Projekt'] . "</td>";
+        echo "<td>" . $row['Test'] . "</td>";
+        echo "<td>" . $row['Dotaznik'] . "</td>";
+        echo "<td>" . $row['Bonus'] . "</td>";
+        echo "<td>" . $row['Sucet'] . "</td>";
+        echo "<td>" . $row['Znamka'] . "</td>";
         echo "</tr>";
-
-        while ($row = mysqli_fetch_array($result)) {
-
-            echo "<td>" . $row['Zapocet'] . "</td>";
-            echo "<td>" . $row['Projekt'] . "</td>";
-            echo "<td>" . $row['Test'] . "</td>";
-            echo "<td>" . $row['Dotaznik'] . "</td>";
-            echo "<td>" . $row['Bonus'] . "</td>";
-            echo "<td>" . $row['Sucet'] . "</td>";
-            echo "<td>" . $row['Znamka'] . "</td>";
-            echo "</tr>";
-        }
-        echo "</table>";
+    }
+    echo "</table>";
 
 
-if ($conn->query($in) === TRUE) {
+    if ($conn->query($in) === TRUE) {
 
-} else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
-}
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
 
 
 } else {
