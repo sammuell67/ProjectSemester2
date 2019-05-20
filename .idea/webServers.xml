@@ -3,11 +3,11 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="962228b9-c43a-4a0a-b51f-33cb80863cd3" name="webte-server" url="http://147.175.121.210">
-        <fileTransfer host="147.175.121.210" port="2126" rootFolder="/home/xsolar/public_html" accessType="SFTP">
+        <fileTransfer host="147.175.121.210" port="2261" rootFolder="/home/xjadvis/public_html" accessType="SFTP">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
-          <option name="port" value="2126" />
+          <option name="port" value="2261" />
         </fileTransfer>
       </webServer>
     </option>
