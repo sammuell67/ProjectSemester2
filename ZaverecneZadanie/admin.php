@@ -2,7 +2,7 @@
 <html lang="sk">
 <head>
     <meta content="text/html; charset=UTF-8">
-    <title>Login</title>
+    <title>Admin</title>
     <link rel="stylesheet" href="css/loginstyle.css">
     <link rel="stylesheet" href="css/style.css">
 
@@ -14,9 +14,8 @@
 <?php
 
 session_start();
-require_once('config.php');
+require_once('configSamo.php');
 $login = $_SESSION['ID'];
-
 echo "<div class='topnav''>";
 echo "<a class='active'>Prihlásený použivateľ : $login</a>";
 echo "</div>";
@@ -52,6 +51,7 @@ echo "</div>";
 
 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" name="vybertabulky" method="post"
       class="form-style-7" enctype="multipart/form-data">
+    <input type="hidden" name="form" value="A">
     <h2>Zobraz výsledky</h2>
 
     Školský rok:
@@ -89,7 +89,6 @@ $oddelovac = $_POST["gender"];
 
 
 $nazovselekt = $nazovpredmetu;
-echo $nazovselekt;
 
 $fileName = $_FILES['fileToUpload']["name"];
 
@@ -121,15 +120,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         for ($i = 1; $i < $row; $i++) {
             $sql = "UPDATE $nazovselekt SET";
             for ($j = 2; $j < $num; $j++) {
+                if($j!=2) {
+                    $sql .= ",";
+                }
                 $sql .= " ";
-                $sql .= "'";
                 $sql .= $arr[0][$j];
+                $sql .= "= ";
                 $sql .= "'";
-                $sql .= "= " . $arr[$i][$j];
+                $sql .= $arr[$i][$j];
+                $sql .= "'";
                 $sql .= " ";
 
             }
-            $sql .= "WHERE $nazovselekt.id = " . $arr[$i][0] . " ); ";
+            $sql .= "WHERE $nazovselekt.id = " . $arr[$i][0] . " ; ";
             mysqli_query($sql);
             $result = mysqli_query($conn, $sql);
         }
@@ -186,22 +189,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             mysqli_query($queryinsert);
             $seqelekt = mysqli_query($conn, $queryinsert);
+
         }
 
-        echo "Výsledky boli úspešne nahrané";
-
+        if ($queryinsert) {
+            echo "Výsledky boli nahrané";
+        }
     }
     if (isset($_POST['vyberbutton'])) {
+
 
         $vyberskolskehoroku = $_POST["vyberskolskehoroku"];
 
         $vybernazvupredmetu = $_POST["vybernazvupredmetu"];
+        $_SESSION["vyberskolskehoroku"] = $vyberskolskehoroku;
+        $_SESSION["vybernazvupredmetu"] = $vybernazvupredmetu;
 
         $column_count = mysqli_num_rows(mysqli_query($conn, "describe $vybernazvupredmetu"));
         $query6 = "SELECT * FROM $vybernazvupredmetu where $vybernazvupredmetu.SkolskyRok = '$vyberskolskehoroku';";
         $query10 = "SELECT COLUMN_NAME  FROM INFORMATION_SCHEMA.COLUMNS WHERE  TABLE_NAME = '$vybernazvupredmetu';";
 
-        echo $column_count;
         $queryyyy = mysqli_query($conn, $query6);
         $hlavicka = mysqli_query($conn, $query10);
 
@@ -227,10 +234,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "</tr>";
         }
         echo "</table>";
+
     }
+}
+?>
+<form name="specialnefunkcie" method="post" action="admin.php" enctype="multipart/form-data">
+    <input type="submit" class='btn' name="Enabled" value="Odstran">
+    <input type='submit' class='btn' name='generujPDF' value='Vygeneruj PDF'>
+</form>
+<?php
+
+
+$vyberskolskehoroku = $_SESSION["vyberskolskehoroku"];
+
+$vybernazvupredmetu = $_SESSION["vybernazvupredmetu"];
+
+
+if (isset($_POST['Enabled'])) {
+
+    $query7 = "DELETE FROM $vybernazvupredmetu where $vybernazvupredmetu.SkolskyRok = '$vyberskolskehoroku';";
+    $queryyyy = mysqli_query($conn, $query7);
+    echo "Odstranene";
 
 }
 
-
 $conn->close();
 ?>
+
+
+
+

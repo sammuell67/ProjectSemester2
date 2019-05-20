@@ -12,71 +12,65 @@
 
 <?php
 session_start();
-require_once ('config.php');
+require_once('configSamo.php');
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-$login=$_SESSION['ID'];
-
-$result = mysqli_query($conn, "SELECT * FROM MNK WHERE id = '$login';");
-$vsetkydb = mysqli_query($conn, "SELECT * FROM SYSOBJECTS WHERE  xtype = 'U';");
-echo $vsetkydb;
-
+$login = $_SESSION['ID'];
 
 echo "<div class='topnav''>";
 echo "<a class='active'>Prihlásený použivateľ : $login</a>";
 echo "</div>";
 
-echo "<h2>Webové technológie 2</h2>";
-echo "<table class='blueTable'>";
-echo "<th>Zapocet</th>";
-echo "<th>Projekt</th>";
-echo "<th>Test</th>";
-echo "<th>Dotazník</th>";
-echo "<th>Bonus</th>";
-echo "<th>Súčet</th>";
-echo "<th>Známka</th>";
-echo "</tr>";
 
-$qty = 0;
-while ($row = mysqli_fetch_array($result)) {
+$result = mysqli_query($conn, "SELECT * FROM MNK WHERE id = '$login';");
+$vsetkydb = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA= '$dbname' ";
+$row_count = mysqli_num_rows(mysqli_query($conn, $vsetkydb));
+//echo $row_count;
+$resultdatabaz = mysqli_query($conn, $vsetkydb);
+$tables = array();
 
-    $qty = $row['Zapocet'] + $row['Projekt'] + $row['Test'] + $row['Dotaznik'] + $row['Bonus'];
-    if ($qty < 56) {
-        $znamka = "FX";
-    }
-    if ($qty >= 56 && $qty < 65) {
-        $znamka = "E";
-    }
-    if ($qty >= 65 && $qty < 74) {
-        $znamka = "D";
-    }
-    if ($qty >= 74 && $qty < 83) {
-        $znamka = "C";
-    }
-    if ($qty >= 83 && $qty < 91) {
-        $znamka = "B";
-    }
-    if ($qty >= 91) {
-        $znamka = "A";
-    }
-    echo "<td>" . $row['Zapocet'] . "</td>";
-    echo "<td>" . $row['Projekt'] . "</td>";
-    echo "<td>" . $row['Test'] . "</td>";
-    echo "<td>" . $row['Dotaznik'] . "</td>";
-    echo "<td>" . $row['Bonus'] . "</td>";
-    echo "<td>" . $qty . "</td>";
-    echo "<td>" . $znamka . "</td>";
-    echo "</tr>";
-    $sql = mysqli_query($conn,"UPDATE Webtech2 SET Sucet = '$qty', Znamka = '$znamka' WHERE id = '$login';");
-
+while ($row4 = mysqli_fetch_assoc($resultdatabaz)) {
+    array_push($tables, $row4['TABLE_NAME']);
 }
 
-echo "</table>";
+for ($o = 0; $o < sizeof($tables); $o++) {
+    $result2 = mysqli_query($conn, "SELECT * FROM $tables[$o] WHERE id = '$login';");
+    $column_count = mysqli_num_rows(mysqli_query($conn, "describe  $tables[$o]"));
 
+
+    if ($result2->num_rows > 0) {
+
+        echo "<h2>$tables[$o]</h2>";
+        echo "<table class='blueTable'>";
+
+        $query10 = "SELECT COLUMN_NAME  FROM INFORMATION_SCHEMA.COLUMNS WHERE  TABLE_NAME = '$tables[$o]';";
+        $hlavicka = mysqli_query($conn, $query10);
+
+
+        while ($row3 = mysqli_fetch_array($hlavicka)) {
+            for ($l = 0; $l < $column_count; $l++) {
+
+                if ($row3[$l] != null) {
+                    echo "<th>" . $row3[$l] . "</th>";
+                }
+            }
+        }
+        echo "</tr>";
+        while ($row4 = mysqli_fetch_array($result2)) {
+
+            for ($f = 0; $f < $column_count; $f++) {
+
+                echo "<td>" . $row4[$f] . "</td>";
+            }
+        }
+        echo "</tr>";
+        echo "<table>";
+    }
+}
 
 
 $conn->close();

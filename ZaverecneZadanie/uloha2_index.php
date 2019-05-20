@@ -9,18 +9,20 @@ if(isset($_POST['login_btn'])) {
     $password = $_POST['password'];
     $hash_pass = password_hash($_POST['password'], PASSWORD_BCRYPT, ['cost' => 12]);
     //$sql="SELECT COUNT(*) as pocet FROM users where login='$login'";
-    $stmt = $conn->prepare("SELECT * FROM Login where ID=:ID ");
+    //$stmt = $conn->prepare("SELECT * FROM Student_uloha2 where meno=:ID ");
+    //$stmt = $conn->prepare("SELECT * FROM Login where ID=:ID ");
+    $stmt = $conn->prepare("SELECT * FROM Student_uloha2 where meno=:ID ");
     $stmt->execute(array(':ID' => $ID));
 
 
     $row = $stmt->fetch();
-    echo $row['ID'];
-   /* if (isset($_POST['checkboxik'])){
+    echo $row['id'];
+    if (isset($_POST['checkboxik'])){
         $stmt = $conn->prepare("SELECT * FROM LoginAdmin where ID=:ID ");
         $stmt->execute(array(':ID' => $ID));
         $row = $stmt->fetch();
         if ($row) {
-            if (password_verify($password,$row['Heslo'])) {
+            if (password_verify($password,$row['heslo'])) {
                 $_SESSION['message'] = "You are now logged in";
                 $_SESSION['ID'] = $ID;
                 // $today=date("Y-m-d H:i:s");
@@ -34,20 +36,21 @@ if(isset($_POST['login_btn'])) {
             echo "Your name  is incorrec";
         }
     }
-    elseif($row) {
-        if (password_verify($password,$row['Heslo'])) {
+    else if($row) {
+       // if (password_verify($password,$row['heslo'])) {
+        if($row['heslo']==$password){
             $_SESSION['message'] = "You are now logged in";
-            $_SESSION['ID'] = $ID;
-           // $today=date("Y-m-d H:i:s");
-           // $sql3="INSERT INTO login(sposob_prihl,log_uz,cas) VALUES ('registracia', '$login','$today')";
-           // $conn->query($sql3);
-            header('location:student.php');
+            $_SESSION['meno'] = $ID;
+            // $today=date("Y-m-d H:i:s");
+            // $sql3="INSERT INTO login(sposob_prihl,log_uz,cas) VALUES ('registracia', '$login','$today')";
+            // $conn->query($sql3);
+            header('location:uloha2_student.php');
         }else{
             echo "Your pass  is incorrec";
         }
     }else{
         echo "Your name  is incorrec";
-    }*/
+    }
 
 
 }
@@ -62,28 +65,37 @@ if(isset($_POST['login_btn'])) {
     <link rel="stylesheet" href="css/loginstyle.css">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:700,600' rel='stylesheet' type='text/css'>
 </head>
+<div class="pad">
+    <div class="col text-center">
+        <a href="uloha2_index.php" class="btn btn-info" role="button">Login</a>
+        <a href="uloha2_LDAP.php" class="btn btn-info" role="button">LDAP Login</a>
 
-    <form method="post"  action="MatusBestLogin.php">
-        <div class="box">
-            <h1>Login</h1>
-
-Prihlásanie ako admin
-<label class="switch">
-                <input name="checkboxik" type="checkbox" >
-                <span class="slider round"></span>
-            </label>
-
-            <input type="text"  name="aisid" placeholder="AIS ID" class="email" />
-
-            <input type="password" name="password" placeholder="Password" class="email" />
+    </div>
 
 
-            <input type="submit" class="btn" name="login_btn" value="Sign in">
+</div>
+
+<form method="post"  action="uloha2_index.php">
+    <div class="box">
+        <h1>Login</h1>
+
+        Prihlásanie ako admin
+        <label class="switch">
+            <input name="checkboxik" type="checkbox" >
+            <span class="slider round"></span>
+        </label>
+
+        <input type="text"  name="aisid" placeholder="AIS ID" class="email" />
+
+        <input type="password" name="password" placeholder="Password" class="email" />
 
 
-        </div> <!-- End Box -->
-        <p>FEKEE</p>
-    </form>
+        <input type="submit" class="btn" name="login_btn" value="Sign in">
+
+
+    </div> <!-- End Box -->
+    <p>FEKERE</p>
+</form>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js" type="text/javascript"></script>
 
